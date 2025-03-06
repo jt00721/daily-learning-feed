@@ -10,7 +10,18 @@ type ResourceRepository struct {
 }
 
 func (repo *ResourceRepository) Create(resource *entity.Resource) error {
-	return repo.DB.Create(resource).Error
+	var existing entity.Resource
+	err := repo.DB.Where("url = ?", resource.URL).First(&existing).Error
+
+	if err == gorm.ErrRecordNotFound {
+		return repo.DB.Create(resource).Error
+	}
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (repo *ResourceRepository) GetAll() ([]entity.Resource, error) {
