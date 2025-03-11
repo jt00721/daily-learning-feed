@@ -1,0 +1,18 @@
+{{ define "content" }}
+<h2>Add a New Learning Resource</h2>
+<form action="/resources" method="POST">
+    <label>Title:</label>
+    <input type="text" name="title" required>
+    
+    <label>URL:</label>
+    <input type="url" name="url" required>
+    
+    <label>Category:</label>
+    <input type="text" name="category">
+    
+    <label>Source:</label>
+    <input type="text" name="source">
+    
+    <button type="submit">Add Resource</button>
+</form>
+{{ end }}
