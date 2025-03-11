@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/jt00721/daily-learning-feed/internal/entity"
+	"github.com/jt00721/daily-learning-feed/internal/domain"
 	"gorm.io/gorm"
 )
 
@@ -9,8 +9,8 @@ type ResourceRepository struct {
 	DB *gorm.DB
 }
 
-func (repo *ResourceRepository) Create(resource *entity.Resource) error {
-	var existing entity.Resource
+func (repo *ResourceRepository) Create(resource *domain.Resource) error {
+	var existing domain.Resource
 	err := repo.DB.Where("url = ?", resource.URL).First(&existing).Error
 
 	if err == gorm.ErrRecordNotFound {
@@ -24,22 +24,22 @@ func (repo *ResourceRepository) Create(resource *entity.Resource) error {
 	return nil
 }
 
-func (repo *ResourceRepository) GetAll() ([]entity.Resource, error) {
-	var resources []entity.Resource
+func (repo *ResourceRepository) GetAll() ([]domain.Resource, error) {
+	var resources []domain.Resource
 	err := repo.DB.Find(&resources).Error
 	return resources, err
 }
 
-func (repo ResourceRepository) GetByID(id uint) (*entity.Resource, error) {
-	var resource entity.Resource
+func (repo ResourceRepository) GetByID(id uint) (*domain.Resource, error) {
+	var resource domain.Resource
 	err := repo.DB.First(&resource, id).Error
 	return &resource, err
 }
 
-func (repo *ResourceRepository) Update(resource *entity.Resource) error {
+func (repo *ResourceRepository) Update(resource *domain.Resource) error {
 	return repo.DB.Save(resource).Error
 }
 
 func (repo *ResourceRepository) Delete(id uint) error {
-	return repo.DB.Delete(&entity.Resource{}, id).Error
+	return repo.DB.Delete(&domain.Resource{}, id).Error
 }

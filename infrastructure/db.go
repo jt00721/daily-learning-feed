@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	"github.com/jt00721/daily-learning-feed/internal/entity"
+	"github.com/jt00721/daily-learning-feed/internal/domain"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -33,7 +33,7 @@ func InitDB() {
 		log.Fatal("Failed to connect to database:", err)
 	}
 
-	err = DB.AutoMigrate(&entity.Resource{})
+	err = DB.AutoMigrate(&domain.Resource{})
 	if err != nil {
 		log.Fatal("Migration failed:", err)
 	}

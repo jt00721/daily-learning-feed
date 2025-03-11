@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/jt00721/daily-learning-feed/internal/entity"
+	"github.com/jt00721/daily-learning-feed/internal/domain"
 	"github.com/mmcdole/gofeed"
 )
 
@@ -18,16 +18,16 @@ func NewRSSFetcher() *RSSFetcher {
 	}
 }
 
-func (f *RSSFetcher) FetchResources(feedURL string) ([]entity.Resource, error) {
+func (f *RSSFetcher) FetchResources(feedURL string) ([]domain.Resource, error) {
 	feed, err := f.Parser.ParseURL(feedURL)
 	if err != nil {
 		log.Println("Failed to fetch RSS feed:", err)
 		return nil, err
 	}
 
-	var resources []entity.Resource
+	var resources []domain.Resource
 	for _, item := range feed.Items {
-		resource := entity.Resource{
+		resource := domain.Resource{
 			Title:     item.Title,
 			URL:       item.Link,
 			Category:  "RSS",
