@@ -1,11 +1,12 @@
 package handler
 
 import (
+	"html/template"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jt00721/daily-learning-feed/internal/entity"
+	"github.com/jt00721/daily-learning-feed/internal/domain"
 	"github.com/jt00721/daily-learning-feed/internal/repository"
 )
 
@@ -13,8 +14,41 @@ type ResourceHandler struct {
 	Repo *repository.ResourceRepository
 }
 
-func (h *ResourceHandler) CreateResource(c *gin.Context) {
-	var resource entity.Resource
+func (h *ResourceHandler) HomePage(w http.ResponseWriter, r *http.Request) {
+	tmpl, _ := template.ParseFiles("web/layout.html", "web/index.html")
+	resources, _ := h.Repo.GetAll()
+
+	data := struct {
+		Title     string
+		Resources []domain.Resource
+	}{
+		Title:     "Daily Learning Feed",
+		Resources: resources,
+	}
+
+	tmpl.Execute(w, data)
+}
+
+func (h *ResourceHandler) AddResourcePage(w http.ResponseWriter, r *http.Request) {
+	tmpl, _ := template.ParseFiles("web/layout.html", "web/add_resource.html")
+	tmpl.Execute(w, struct{ Title string }{Title: "Add Resource"})
+}
+
+func (h *ResourceHandler) CreateResourceForm(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	resource := domain.Resource{ // Ensure this uses the `entity.Resource` struct
+		Title:    r.FormValue("title"),
+		URL:      r.FormValue("url"),
+		Category: r.FormValue("category"),
+		Source:   r.FormValue("source"),
+	}
+
+	h.Repo.Create(&resource)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+func (h *ResourceHandler) CreateResourceJSON(c *gin.Context) {
+	var resource domain.Resource
 	if err := c.ShouldBindJSON(&resource); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
 		return
@@ -52,7 +86,7 @@ func (h *ResourceHandler) GetResourceByID(c *gin.Context) {
 
 func (h *ResourceHandler) UpdateResource(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	var resource entity.Resource
+	var resource domain.Resource
 	if err := c.ShouldBindJSON(&resource); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
 		return
