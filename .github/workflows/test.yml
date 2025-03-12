@@ -37,8 +37,4 @@ jobs:
         run: go mod tidy
 
       - name: Run unit tests (excluding E2E tests)
-        run: |
-          go test -v ./infrastructure/youtube_fetcher_test.go
-          go test -v ./infrastructure/devto_fetcher_test.go
-          go test -v ./internal/handler/resource_handler_test.go
-          go test -v ./internal/repository/resource_repository_test.go
+        run: go test -v ./...
