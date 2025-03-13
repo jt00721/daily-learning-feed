@@ -18,6 +18,7 @@ WORKDIR /app
 
 # Copy the built binary
 COPY --from=build /app/main .
+COPY --from=build /app/web ./web
 
 # Expose the port
 EXPOSE 8080
