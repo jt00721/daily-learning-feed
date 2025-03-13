@@ -24,5 +24,7 @@ COPY --from=build /app/static ./static
 # Expose the port
 EXPOSE 8080
 
+RUN apt-get update && apt-get install -y ca-certificates
+
 # Run the app
 CMD ["/app/main"]
