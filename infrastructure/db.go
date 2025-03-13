@@ -18,7 +18,7 @@ func InitDB() {
 		log.Println("Warning: .env file not found, using Railway environment variables")
 	}
 
-	dsn := os.Getenv("DATABASE_URL") + "?sslmode=disable"
+	dsn := os.Getenv("DATABASE_PUBLIC_URL") //+ "?sslmode=disable"
 	if dsn == "" {
 		log.Fatal("DATABASE_URL is not set")
 	}
