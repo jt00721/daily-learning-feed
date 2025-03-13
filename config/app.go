@@ -23,11 +23,13 @@ type App struct {
 // NewApp initializes the app
 func NewApp() *App {
 	// Load environment variables
+	log.Println("Starting app...")
 	err := godotenv.Load()
 	if err != nil {
 		log.Println("Warning: Could not load .env file, using system environment variables")
 	}
 
+	log.Println("Initialising DB...")
 	// Initialize database
 	infrastructure.InitDB()
 
@@ -58,5 +60,5 @@ func (app *App) Run() {
 	}
 
 	fmt.Println("Server running on port", port)
-	app.Router.Run(":" + port)
+	app.Router.Run("0.0.0.0:" + port)
 }
