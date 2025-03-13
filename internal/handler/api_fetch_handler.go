@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -23,7 +24,7 @@ func (h *APIHandler) FetchYouTubeVideos(c *gin.Context) {
 
 	videos, err := h.YouTubeFetcher.FetchVideos(query)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch YouTube videos"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch YouTube videos " + fmt.Sprintf("%v", err)})
 		return
 	}
 
