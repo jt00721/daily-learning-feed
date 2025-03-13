@@ -25,7 +25,7 @@ func NewApp() *App {
 	// Load environment variables
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Println("Warning: Could not load .env file, using system environment variables")
 	}
 
 	// Initialize database
